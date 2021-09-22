@@ -21,55 +21,55 @@ class UserController implements Controller {
         this.router.delete(`${this.path}/:id`, this.delete);
     }
 
-    private test = async (request: express.Request, response: express.Response) => {
-        response.send('Test')
+    test = () => {
+        return 'Test';
     }
 
-    private getAll = async (request: express.Request, response: express.Response) => {
+    getAll = async (request: any, response: any) => {
         try {
             const data = await this.user.find()
-            if (_.isEmpty(data)) response.send({code: 1, message: 'không có dữ liệu'})
-            response.send({code: 'OK', message: data})
+            if (_.isEmpty(data)) return response.send({code: 1, message: 'không có dữ liệu'})
+            return response.send({code: 'OK', message: data})
         } catch (e) {
             console.log(e)
         }
     }
 
-    private create = async (request: express.Request, response: express.Response) => {
+    create = async (request: express.Request, response: express.Response) => {
         const data = request.body;
         try {
             const create = await this.user.create(data)
-            response.send({code: 'OK', message: create})
+            return response.send({code: 'OK', message: create})
         } catch (e) {
             console.log(e)
         }
     }
 
-    private update = async (request: express.Request, response: express.Response) => {
+    update = async (request: express.Request, response: express.Response) => {
         const data = request.body;
         const id = request.params.id
         try {
             const update = await this.user.findByIdAndUpdate(id, data, {new: true})
-            response.send({code: 'OK', message: update})
+            return response.send({code: 'OK', message: update})
         } catch (e) {
             console.log(e)
         }
     }
 
-    private delete = async (request: express.Request, response: express.Response) => {
+    delete = async (request: express.Request, response: express.Response) => {
 
         const id = request.params.id
 
         try {
             const remove = await this.user.findOneAndUpdate({id: id, active: true}, {active: false}, {new: true})
             if (remove) {
-                response.send({code: 'OK', message: remove})
+                return response.send({code: 'OK', message: remove})
             }
-            response.send({code: 0, message: 'không tồn tại bản ghi này'})
+            return response.send({code: 0, message: 'không tồn tại bản ghi này'})
         } catch (e) {
             console.log(e)
         }
     }
 }
 
-export default UserController;
+export default UserController
